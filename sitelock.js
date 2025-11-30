@@ -20,12 +20,56 @@
     }
   };
 
-  /* ---------- window.open ---------- */
+  /* =====================================================
+     BLOCK IFRAME-BASED POPUP BYPASS (safeWindowOpen)
+     ===================================================== */
+
+  // Patch iframe creation to neuter any attempt to use iframe.contentWindow.open
+  const origCreateElement = document.createElement;
+  document.createElement = function(tag) {
+    const el = origCreateElement.call(document, tag);
+    
+    // Only handle iframes
+    if (tag.toLowerCase() === "iframe") {
+      Object.defineProperty(el, "contentWindow", {
+        get() {
+          // Return a fake contentWindow where open() is disabled
+          return {
+            open: function() {
+              console.warn("Blocked iframe-based popup.");
+              return null;
+            }
+          };
+        }
+      });
+    }
+    return el;
+  };
+
+  // Global protection: block ANY attempt to use a foreign window.open (iframe/external)
   const origOpen = window.open;
-  window.open = function (url, ...args) {
+  window.open = function(url, ...args) {
     const redirect = check(url);
+
+    // If called from inside an iframe context, block popup
+    if (window.frameElement) {
+      console.warn("Blocked popup from iframe context.");
+      return null;
+    }
+
+    // block suspicious attempts to use frameWindow.open
+    if (this && this !== window) {
+      console.warn("Blocked cross-context popup attempt.");
+      return null;
+    }
+
     return origOpen.call(window, redirect || url, ...args);
   };
+
+
+  /* =====================================================
+     (Your original protections remain the same)
+     ===================================================== */
 
   /* ---------- Application.OpenURL (if exists) ---------- */
   if (window.Application?.OpenURL) {
@@ -88,4 +132,5 @@
       return origNav.call(window, redirect || url);
     };
   }
+
 })();
