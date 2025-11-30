@@ -7,7 +7,9 @@
         'dashmetry.io': 'dashmetry.github.io',
         'geometrydashlite.online': 'dashmetry.github.io',
         'poki.com': 'dashmetry.github.io',
-        'discord.gg': 'https://dc.gg/martin'
+        '2playergames.gitlab.io': 'dc.gg/martin',
+        'dressupgames.gitlab.io': 'dc.gg/martin',
+        'discord.gg': 'dc.gg/martin'
       };
 
       window.open = function (url, ...args) {
