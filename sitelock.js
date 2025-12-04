@@ -7,6 +7,8 @@
     'geometrydashlite.online': 'dashmetry.github.io',
     'poki.com': 'dashmetry.github.io',
     '2playergames.gitlab.io': 'dc.gg/martin',
+    'ubg6.gitlab.io': 'dc.gg/martin',
+    'ubg98.github.io': 'dc.gg/martin',
     'dressupgames.gitlab.io': 'dc.gg/martin',
     'discord.gg': 'dc.gg/martin'
   };
